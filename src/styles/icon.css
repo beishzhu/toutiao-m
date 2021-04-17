@@ -1,12 +1,3 @@
-body {
-  background-color: #f5f7f9;
-}
-.page-nav-bar {
-  background-color: #3296fa;
-}
-.page-nav-bar .van-nav-bar__title {
-  color: #fff;
-}
 @font-face {
   font-family: "toutiao";
   src: url('//at.alicdn.com/t/font_2492476_uarv7fos35f.eot?t=1618562314112');
