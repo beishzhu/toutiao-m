@@ -1,27 +1,17 @@
 <template>
   <div class="home-container">
     <!-- 导航栏 -->
-    <van-nav-bar class="page-nav-bar">
-      <van-button
-        class="search-btn"
-        slot="title"
-        type="info"
-        size="small"
-        round
-        icon="search"
-        >搜索</van-button
-      >
+    <van-nav-bar class="page-nav-bar" fixed>
+      <van-button class="search-btn" slot="title" type="info" size="small" round icon="search">搜索</van-button>
     </van-nav-bar>
     <!-- /导航栏 -->
 
     <!-- 频道列表 -->
     <van-tabs class="chanel-tabs" v-model="active" animated swipeable>
-      <van-tab
-        v-for="chinner in channels"
-        :key="chinner.id"
-        :title="chinner.name"
-        >{{ chinner.name }}的内容</van-tab
-      >
+      <van-tab v-for="channel in channels" :key="channel.id" :title="channel.name">
+        <!-- 频道文章列表 -->
+        <article-list :channel="channel"></article-list>
+      </van-tab>
 
       <div slot="nav-right" class="placeholder"></div>
       <div slot="nav-right" class="hamburger-btn">
@@ -33,9 +23,10 @@
 
 <script>
 import { getUserInfoList } from '@/api/user'
+import articleList from './components/article-list'
 export default {
   name: 'HomeIndex',
-  components: {},
+  components: { articleList },
   props: {},
   data() {
     return { active: 0, channels: [] }
@@ -45,7 +36,7 @@ export default {
   created() {
     this.loadChannels()
   },
-  mounted() {},
+  mounted() { },
   methods: {
     async loadChannels() {
       try {
@@ -62,6 +53,8 @@ export default {
 
 <style scoped lang="less">
 .home-container {
+  padding-top: 174px;
+  padding-bottom: 100px;
   /deep/ .van-nav-bar__title {
     max-width: unset;
   }
@@ -77,6 +70,11 @@ export default {
   }
   /deep/ .chanel-tabs {
     .van-tabs__wrap {
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      right: 0;
+      top: 92px;
       height: 82px;
     }
     .van-tab {

@@ -7,6 +7,8 @@ import 'vant/lib/index.css'
 // 加载全局样式
 import './styles/index.less'
 import 'amfe-flexible'
+// 加载日期
+import './utils/dayjs'
 Vue.config.productionTip = false
 Vue.use(Vant)
 new Vue({
