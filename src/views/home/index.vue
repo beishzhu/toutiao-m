@@ -14,24 +14,36 @@
       </van-tab>
 
       <div slot="nav-right" class="placeholder"></div>
-      <div slot="nav-right" class="hamburger-btn">
+      <div slot="nav-right" class="hamburger-btn" @click="isChanelEditDilog=true">
         <i class="toutiao toutiao-gengduo"></i>
       </div>
     </van-tabs>
+
+    <!-- 编辑频道对话框 -->
+    <van-popup close-icon-position="top-left" v-model="isChanelEditDilog" closeable position="bottom" :style="{ height: '100%' }">
+      <chanel-edit :my-channels="channels" :active="active" @change-chanel="changeChanel"></chanel-edit>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserInfoList } from '@/api/user'
 import articleList from './components/article-list'
+import ChanelEdit from './components/chanel-edit'
+import { mapState } from 'vuex'
+import { getItem } from '@/store/storage'
 export default {
   name: 'HomeIndex',
-  components: { articleList },
+  components: { articleList, ChanelEdit },
   props: {},
   data() {
-    return { active: 0, channels: [] }
+    return {
+      active: 0,
+      channels: [], // 频道列表
+      isChanelEditDilog: false
+    }
   },
-  computed: {},
+  computed: { ...mapState(['user']) },
   watch: {},
   created() {
     this.loadChannels()
@@ -40,13 +52,39 @@ export default {
   methods: {
     async loadChannels() {
       try {
-        const { data } = await getUserInfoList()
-        this.channels = data.data.channels
-        console.log(data)
+        // const { data } = await getUserInfoList()
+        // this.channels = data.data.channels
+        // console.log(data)
+        let channels = []
+        // 获取频道列表数据
+        // 1.判断用户是否已登陆
+        if (this.user) {
+          // 如果已登陆 直接请求用户频道数据
+          const { data } = await getUserInfoList()
+          channels = data.data.channels
+        } else {
+          // 2.用户没有登陆 获取本地存储的频道数据
+          const localChannels = getItem('TOUTIAO_CHANELS')
+          // 3.如果本地存储有数据就直接用
+          if (localChannels) {
+            channels = localChannels
+          } else {
+            // 4.本地存储没有数据就请求默认数据来使用
+            const { data } = await getUserInfoList()
+            channels = data.data.channels
+          }
+        }
+        this.channels = channels
       } catch (error) {
-        this.$toast('获取频道列表数据失败')
+        console.log(error)
+        this.$toast('获取频道列表数据失败123456', error)
       }
     },
+    // 更新激活的频道项目
+    changeChanel(index, isChanelEditDilog = true) {
+      this.active = index
+      this.isChanelEditDilog = isChanelEditDilog
+    }
   },
 }
 </script>
