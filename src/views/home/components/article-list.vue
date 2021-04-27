@@ -2,8 +2,7 @@
   <div class="article-list">
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh" :success-text="refreshSuccessText" :success-duration="1500">
       <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <article-item v-for="(article,index) in list" :key="index" :article="article"></article-item>
-        <!-- <van-cell v-for="(article,index) in list" :key="index" :title="article.title" /> -->
+        <article-item v-for="(article,index) in list" :key="index" :article="article" ></article-item>
       </van-list>
     </van-pull-refresh>
   </div>

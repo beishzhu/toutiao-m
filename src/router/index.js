@@ -30,6 +30,21 @@ const routes = [{
   }]
 
 
+}, {
+  path: '/search',
+  name: 'search',
+  component: () => import('@/views/search')
+}, {
+  // 文章详情页路由
+  path: '/article/:articleId',
+  name: 'article',
+  component: () => import('@/views/article'),
+  props: true
+}, {
+  // 用户资料
+  path: '/user/profile',
+  name: 'user-profile',
+  component: () => import('@/views/user-profile'),
 }]
 
 const router = new VueRouter({
